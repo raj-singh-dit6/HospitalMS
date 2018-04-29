@@ -48,25 +48,6 @@ public class DoctorController {
 		return resp;
 	}
 
-	/**
-	 * 
-	 * @param doctorDto
-	 * @return
-	 */
-	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse addDoctor(@RequestBody DoctorDto doctorDto) {
-		CrudResponse resp = new CrudResponse();
-		
-		try {
-			doctorService.addDoctor(doctorDto);
-			resp.setSuccess(true);
-		} catch (Exception e) {
-
-			LOG.error("Exception in addDoctor() ", e);
-		}
-		return resp;
-	}
 
 	/**
 	 * 

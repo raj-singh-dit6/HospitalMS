@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hospitalms.dto.UserDto;
+import com.hospitalms.model.Role;
 import com.hospitalms.model.User;
 import com.hospitalms.model.UserSession;
 import com.hospitalms.repository.UserRepository;
@@ -22,6 +23,13 @@ public class UserService{
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	DoctorService doctorService;
+	
+
+	@Autowired
+	PatientService patientService;
 	
 	@Autowired
 	UserSessionRepository userSessRepository;
@@ -51,7 +59,22 @@ public class UserService{
 	
 	
 	public UserDto addUser(UserDto userDto) {
-		userRepository.save(mapper.map(userDto,User.class));
+		boolean normalUser=true;
+		for (Role role : userDto.getUserRoles())
+		{
+			if(role.getType().equalsIgnoreCase("DOCTOR"))
+			{
+				doctorService.addDoctor(userDto);
+				normalUser=false;
+			}else if(role.getType().equalsIgnoreCase("PATIENT")) {
+				patientService.addPatient(userDto);
+				normalUser=false;
+			}
+		}
+		
+		if(normalUser)
+			userRepository.save(mapper.map(userDto,User.class));
+		
 		return userDto;
 	}
 	

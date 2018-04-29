@@ -1,7 +1,5 @@
 package com.hospitalms.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,26 +42,6 @@ public class PatientController {
 		} catch (Exception e) {
 
 			LOG.error("Exception in getPatient() ", e);
-		}
-		return resp;
-	}
-
-	/**
-	 * 
-	 * @param patientDto
-	 * @return
-	 */
-	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse addPatient(@RequestBody PatientDto patientDto) {
-		CrudResponse resp = new CrudResponse();
-		resp.setSuccess(false);
-		try {
-			patientService.addPatient(patientDto);
-			resp.setSuccess(true);
-		} catch (Exception e) {
-
-			LOG.error("Exception in addPatient() ", e);
 		}
 		return resp;
 	}

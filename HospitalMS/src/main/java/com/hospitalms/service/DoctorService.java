@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hospitalms.dto.DoctorDto;
+import com.hospitalms.dto.UserDto;
 import com.hospitalms.model.Doctor;
+import com.hospitalms.model.User;
 import com.hospitalms.repository.DoctorRepository;
 
 
@@ -40,9 +42,11 @@ public class DoctorService {
 	}
 	
 	
-	public DoctorDto addDoctor(DoctorDto doctorDto) {
-		doctorRepository.save(mapper.map(doctorDto,Doctor.class));
-		return doctorDto;
+	public void addDoctor(UserDto userDto) {
+		User user = mapper.map(userDto,User.class);
+		Doctor doctor = new Doctor();
+		doctor.setUser(user);
+		doctorRepository.save(doctor);
 	}
 	
 	public DoctorDto updateDoctor(DoctorDto doctorDto) {

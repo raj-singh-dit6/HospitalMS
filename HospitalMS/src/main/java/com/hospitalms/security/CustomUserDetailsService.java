@@ -3,7 +3,6 @@ package com.hospitalms.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +18,25 @@ import com.hospitalms.model.Role;
 import com.hospitalms.model.User;
 import com.hospitalms.repository.UserRepository;
 
-
 @Service("customUserDetailsService")
-public class CustomUserDetailsService implements UserDetailsService{
-	
+public class CustomUserDetailsService implements UserDetailsService {
+
 	private static final Logger LOG = LoggerFactory.getLogger(CustomUserDetailsService.class);
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
 	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String userName)
-	{
-		System.err.println("userName : "+userName);
+	public UserDetails loadUserByUsername(String userName) {
+		System.err.println("userName : " + userName);
 		User user = userRepository.findByUserName(userName);
-		LOG.info("User { } ",user);
-		if(user==null) {
-			LOG.info("user not found");
+		LOG.info("User { } ", user);
+		if (user == null) {
+			LOG.info("User not found");
 			throw new UsernameNotFoundException("Username not found");
 		}
-		
-		CurrentUser currentUser= new CurrentUser(user.getUserName(), user.getPassword(), true, true, true, true, getGrantedAuthorities(user));
+		CurrentUser currentUser = new CurrentUser(user.getUserName(), user.getPassword(), true, true, true, true,
+				getGrantedAuthorities(user));
 		currentUser.setUserName(userName);
 		currentUser.setEmail(user.getEmail());
 		currentUser.setFirstName(user.getFirstName());
@@ -47,14 +44,14 @@ public class CustomUserDetailsService implements UserDetailsService{
 		currentUser.setRoles(user.getUserRoles());
 		return currentUser;
 	}
-	
-	private List<GrantedAuthority> getGrantedAuthorities(User user){
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        for(Role role : user.getUserRoles()){
-        	LOG.info("Role : {}", role);
-            authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getType()));
-        }
-        LOG.info("authorities : {}", authorities);
-        return authorities;
-    }
+
+	private List<GrantedAuthority> getGrantedAuthorities(User user) {
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		for (Role role : user.getUserRoles()) {
+			LOG.info("Role : {}", role);
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getType()));
+		}
+		LOG.info("authorities : {}", authorities);
+		return authorities;
+	}
 }

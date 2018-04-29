@@ -13,7 +13,6 @@ public class SingleResponse<R> extends BaseResponse {
 
 	/**
 	 * Returns the total of records.
-	 * 
 	 * @return Integer
 	 */
 	public Integer getTotal() {
@@ -22,7 +21,6 @@ public class SingleResponse<R> extends BaseResponse {
 
 	/**
 	 * Sets the total records in the record set.
-	 * 
 	 * @param total int
 	 */
 	public void setTotal(int total) {

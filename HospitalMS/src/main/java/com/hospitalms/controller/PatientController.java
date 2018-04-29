@@ -28,7 +28,7 @@ public class PatientController {
 	private static final Logger LOG = LoggerFactory.getLogger(PatientController.class);
 
 	/**
-	 * 
+	 * Returns a single Patient record  corresponding to @param id.  
 	 * @param id
 	 * @return
 	 */
@@ -47,7 +47,7 @@ public class PatientController {
 	}
 
 	/**
-	 * 
+	 * Updates the Patient record with updated values in @RequestBody patientDto
 	 * @param patientDto
 	 * @return
 	 */
@@ -67,7 +67,7 @@ public class PatientController {
 	}
 
 	/**
-	 * 
+	 * Deletes a Patient record corresponding to @param id.
 	 * @param id
 	 * @return
 	 */
@@ -85,7 +85,7 @@ public class PatientController {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of Patient records.  
 	 * @return
 	 */
 	@GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })

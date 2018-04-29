@@ -17,7 +17,8 @@ public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	 * Respond to an unauthorized request with a 401 Unauthorized status code
 	 */
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException authException) throws IOException, ServletException {
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
 	}
 }

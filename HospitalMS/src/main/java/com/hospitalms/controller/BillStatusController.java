@@ -28,7 +28,7 @@ public class BillStatusController {
 	private static final Logger LOG = LoggerFactory.getLogger(BillStatusController.class);
 
 	/**
-	 * 
+	 * Returns a single BillStatus record  corresponding to @param id.  
 	 * @param id
 	 * @return
 	 */
@@ -47,8 +47,7 @@ public class BillStatusController {
 	}
 
 	/**
-	 * 
-	 * @param billStatusDto
+	 * Adds a BillStatus record with new BillStatus record values in @RequestBody billStatusDto
 	 * @return
 	 */
 	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
@@ -67,7 +66,7 @@ public class BillStatusController {
 	}
 
 	/**
-	 * 
+	 * Updates the BillStatus record with updated values in @RequestBody billStatusDto
 	 * @param billStatusDto
 	 * @return
 	 */
@@ -87,7 +86,7 @@ public class BillStatusController {
 	}
 
 	/**
-	 * 
+	 * Deletes a BillStatus record corresponding to @param id.
 	 * @param id
 	 * @return
 	 */
@@ -106,7 +105,7 @@ public class BillStatusController {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of BillStatus records.  
 	 * @return
 	 */
 	@GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })

@@ -18,39 +18,38 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hospitalms.model.responses.Response;
 
-
 @Component
 public class RESTLogoutSuccessHandler implements LogoutSuccessHandler {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(RESTLogoutSuccessHandler.class);
-	
+
 	private final ObjectMapper mapper;
-	
+
 	@Autowired
 	RESTLogoutSuccessHandler(MappingJackson2HttpMessageConverter messageConverter) {
-        this.mapper = messageConverter.getObjectMapper();
-    }
-	
+		this.mapper = messageConverter.getObjectMapper();
+	}
+
 	@Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+			throws IOException {
 		HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+		if (session != null) {
+			session.invalidate();
+		}
 		try {
 			if (authentication.isAuthenticated())
 				authentication.setAuthenticated(false);
-			
+
 			response.setStatus(HttpServletResponse.SC_OK);
-	        Response<Object> resp = new Response<Object>();
-	        resp.setSuccess(true);
-	  
-	        PrintWriter writer = response.getWriter();
-	        mapper.writeValue(writer, resp);
-	        writer.flush();
-		}
-		catch (Exception e) {
+			Response<Object> resp = new Response<Object>();
+			resp.setSuccess(true);
+
+			PrintWriter writer = response.getWriter();
+			mapper.writeValue(writer, resp);
+			writer.flush();
+		} catch (Exception e) {
 			LOG.error("Exception in onLogoutSuccess() in RESTLogoutSuccessHandler class");
 		}
-    }
+	}
 }

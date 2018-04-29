@@ -1,7 +1,5 @@
 package com.hospitalms.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,7 @@ public class HospitalController {
 	private static final Logger LOG = LoggerFactory.getLogger(HospitalController.class);
 
 	/**
-	 * 
+	 * Returns a single Hospital record  corresponding to @param id.  
 	 * @param id
 	 * @return
 	 */
@@ -51,8 +49,7 @@ public class HospitalController {
 	}
 
 	/**
-	 * 
-	 * @param hospitalDto
+	 * Adds a Hospital record with new Hospital record values in @RequestBody hospitalDto
 	 * @return
 	 */
 	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
@@ -71,7 +68,7 @@ public class HospitalController {
 	}
 
 	/**
-	 * 
+	 * Updates the Hospital record with updated values in @RequestBody hospitalDto
 	 * @param hospitalDto
 	 * @return
 	 */
@@ -91,7 +88,7 @@ public class HospitalController {
 	}
 
 	/**
-	 * 
+	 * Deletes a Hospital record corresponding to @param id.
 	 * @param id
 	 * @return
 	 */
@@ -109,7 +106,7 @@ public class HospitalController {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of Hospital records.  
 	 * @return
 	 */
 	@GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })

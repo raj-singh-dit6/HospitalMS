@@ -23,7 +23,6 @@ public class Response<R> extends BaseResponse {
 		
 	/**
 	 * Returns the total number of records when paginating.
-	 * 
 	 * @return Integer
 	 */
 	public Integer getTotal() {
@@ -32,7 +31,6 @@ public class Response<R> extends BaseResponse {
 	
 	/**
 	 * Sets the total records in the record set.
-	 * 
 	 * @param total int
 	 */
 	public void setTotal(int total) {

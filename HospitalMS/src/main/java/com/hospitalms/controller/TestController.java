@@ -1,7 +1,5 @@
 package com.hospitalms.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,8 @@ public class TestController {
 	private static final Logger LOG = LoggerFactory.getLogger(TestController.class);
 
 	/**
-	 * 
+	 * Returns a single Test record  corresponding to @param id.  
+	 * @param id
 	 * @return
 	 */
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -49,8 +48,7 @@ public class TestController {
 	}
 
 	/**
-	 * 
-	 * @param testDto
+	 * Adds a Test record with new Test record values in @RequestBody testDto
 	 * @return
 	 */
 	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
@@ -68,8 +66,8 @@ public class TestController {
 	}
 
 	/**
-	 * 
-	 * @param occupancy
+	 * Updates the Test record with updated values in @RequestBody testDto
+	 * @param testDto
 	 * @return
 	 */
 	@PostMapping(value = "/update", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
@@ -87,7 +85,7 @@ public class TestController {
 	}
 
 	/**
-	 * 
+	 * Deletes a Test record corresponding to @param id.
 	 * @param id
 	 * @return
 	 */
@@ -104,7 +102,7 @@ public class TestController {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of Test records.  
 	 * @return
 	 */
 	@GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })

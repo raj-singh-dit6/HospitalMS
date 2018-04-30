@@ -1,6 +1,5 @@
 package com.hospitalms.dto;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +26,5 @@ public class UserDto {
 	private Hospital hospital;
 	private Patient patient;
 	private UserSession userSession;
-	private LocalDateTime createDateTime;
-	private LocalDateTime updateDateTime;
 	
 }

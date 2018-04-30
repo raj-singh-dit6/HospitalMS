@@ -3,6 +3,8 @@ package com.hospitalms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import com.hospitalms.repository.TestRepository;
 
 
 @Service("testService")
+@Transactional
 public class TestService {	
 		
 	private static final Logger LOG = LoggerFactory.getLogger(TestService.class);
@@ -36,7 +39,7 @@ public class TestService {
 	}
 
 	public TestDto getTest(Integer id) {
-		return mapper.map(testRepository.findById(id),TestDto.class);
+		return mapper.map(testRepository.findById(id).get(),TestDto.class);
 	}
 	
 	

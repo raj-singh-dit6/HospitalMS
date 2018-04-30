@@ -12,111 +12,117 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hospitalms.dto.HospitalDto;
+import com.hospitalms.dto.SpecialityDto;
 import com.hospitalms.model.responses.CrudResponse;
 import com.hospitalms.model.responses.Response;
 import com.hospitalms.model.responses.SingleResponse;
-import com.hospitalms.service.HospitalService;
+import com.hospitalms.service.SpecialityService;
 
 @RestController
-@RequestMapping("/hospital")
-public class HospitalController {
+@RequestMapping("/speciality")
+public class SpecialityController {
 
 	@Autowired
-	private HospitalService hospitalService;
+	private SpecialityService specialityService;
 
-	private static final Logger LOG = LoggerFactory.getLogger(HospitalController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SpecialityController.class);
 
 	/**
-	 * Returns a single Hospital record  corresponding to @param id.  
+	 * Returns a single Speciality record corresponding to @param id.
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public SingleResponse<HospitalDto> getHospital(@PathVariable("id") Integer id) {
-		SingleResponse<HospitalDto> resp = new SingleResponse<HospitalDto>();
-		
-		resp.setTotal(0);
+	public SingleResponse<SpecialityDto> getSpeciality(@PathVariable("id") Integer id) {
+		SingleResponse<SpecialityDto> resp = new SingleResponse<SpecialityDto>();
 		try {
-			resp.setTotal(1);
-			resp.setData(hospitalService.getHospital(id));
+			resp.setData(specialityService.getSpeciality(id));
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in getHospital() ", e);
+			LOG.error("Exception in getSpeciality() ", e);
 		}
 		return resp;
 	}
 
 	/**
-	 * Adds a Hospital record with new Hospital record values in @RequestBody hospitalDto
+	 * Adds a speciality record with new speciality record values in @RequestBody
+	 * specialityDto
+	 * 
 	 * @return
 	 */
 	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse addHospital(@RequestBody HospitalDto hospitalDto) {
+	public CrudResponse addSpeciality(@RequestBody SpecialityDto specialityDto) {
 		CrudResponse resp = new CrudResponse();
+
 		try {
-			hospitalService.addHospital(hospitalDto);
+			specialityService.addSpeciality(specialityDto);
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in addHospital() ", e);
+			LOG.error("Exception in addSpeciality() ", e);
 		}
 		return resp;
 	}
 
 	/**
-	 * Updates the Hospital record with updated values in @RequestBody hospitalDto
-	 * @param hospitalDto
+	 * Updates the Speciality record with updated values in @RequestBody
+	 * specialityDto
+	 * 
+	 * @param specialityDto
 	 * @return
 	 */
 	@PostMapping(value = "/update", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse updateHospital(@RequestBody HospitalDto hospitalDto) {
+	public CrudResponse updateSpeciality(@RequestBody SpecialityDto specialityDto) {
 		CrudResponse resp = new CrudResponse();
-		
+
 		try {
-			hospitalService.updateHospital(hospitalDto);
+			specialityService.updateSpeciality(specialityDto);
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in updateHospital() ", e);
+			LOG.error("Exception in updateSpeciality() ", e);
 		}
 		return resp;
 	}
 
 	/**
-	 * Deletes a Hospital record corresponding to @param id.
+	 * Deletes a Speciality record corresponding to @param id.
+	 * 
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/{hospitalId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse deleteHospital(@PathVariable("id") Integer id) {
+	@DeleteMapping(value = "/delete/{specialityId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public CrudResponse deleteSpeciality(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		try {
-			hospitalService.deleteHospital(id);;
+			specialityService.deleteSpeciality(id);
+			;
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in deleteHospital() ", e);
+			LOG.error("Exception in deleteSpeciality() ", e);
 		}
 		return resp;
 	}
-	
+
 	/**
-	 * Returns a list of Hospital records.  
+	 * Returns a list of Speciality records.
+	 * 
 	 * @return
 	 */
 	@GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public Response<HospitalDto> getHospitals() {
-		Response<HospitalDto> resp = new Response<HospitalDto>();
+	public Response<SpecialityDto> getSpecialities() {
+		Response<SpecialityDto> resp = new Response<SpecialityDto>();
 		try {
-			resp.setData(hospitalService.getHospitals());
+			resp.setData(specialityService.getSpecialities());
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in getHospitals() ", e);
+			LOG.error("Exception in getSpecialitys() ", e);
 		}
 		return resp;
 	}

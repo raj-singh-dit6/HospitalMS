@@ -1,6 +1,5 @@
 package com.hospitalms.dto;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +25,4 @@ public class PatientDto {
 	private Date discharedDate;
     private Set<Appointment> appointments = new HashSet<Appointment>();
     private Set<TestReport> testReports = new HashSet<TestReport>();
-	private LocalDateTime createDateTime;
-	private LocalDateTime updateDateTime;
 }

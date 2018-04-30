@@ -8,9 +8,6 @@ import com.hospitalms.model.UserSession;
 public interface UserSessionRepository extends CrudRepository<UserSession, Integer>{
 
 	UserSession findByUser(User user);
-
-	UserSession findByUserAndSessionKey(User user, String sessionKey);
-
-	UserSession findByUserAndSessionKey(String userName, String sessionKey);
+	UserSession findByIdAndSessionKey(Integer id, String sessionKey);
 
 }

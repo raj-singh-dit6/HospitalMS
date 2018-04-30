@@ -3,6 +3,8 @@ package com.hospitalms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import com.hospitalms.model.Role;
 import com.hospitalms.repository.RoleRepository;
 
 @Service("roleService")
+@Transactional
 public class RoleService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(RoleService.class);
@@ -50,7 +53,7 @@ public class RoleService {
 	}
 
 	public RoleDto getRole(Integer id) {
-		return mapper.map(roleRepository.findById(id),RoleDto.class);
+		return mapper.map(roleRepository.findById(id).get(),RoleDto.class);
 	}
 
 	

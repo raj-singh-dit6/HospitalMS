@@ -3,6 +3,8 @@ package com.hospitalms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import com.hospitalms.repository.UserRepository;
 import com.hospitalms.repository.UserSessionRepository;
 
 @Service("userService")
+@Transactional
 public class UserService{
 
 	private static final Logger LOG = LoggerFactory.getLogger(RoleService.class);
@@ -38,8 +41,9 @@ public class UserService{
 	ModelMapper mapper;
 
 	public boolean authenticate(String userName, String sessionKey) {
+		System.err.println("userName: "+userName+"  &  sessionKey:"+sessionKey);
 		User user = userRepository.findByUserName(userName);
-		UserSession  userSession = userSessRepository.findByUserAndSessionKey(user, sessionKey);
+		UserSession  userSession = userSessRepository.findByIdAndSessionKey(user.getId(),sessionKey);
 		return userSession!=null;
 	}
 	
@@ -54,7 +58,7 @@ public class UserService{
 	}
 
 	public UserDto getUser(Integer id) {
-		return mapper.map(userRepository.findById(id),UserDto.class);
+		return mapper.map(userRepository.findById(id).get(),UserDto.class);
 	}
 	
 	

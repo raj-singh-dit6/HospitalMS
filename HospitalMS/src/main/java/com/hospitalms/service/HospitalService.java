@@ -3,6 +3,8 @@ package com.hospitalms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,16 +13,23 @@ import org.springframework.stereotype.Service;
 
 import com.hospitalms.dto.HospitalDto;
 import com.hospitalms.model.Hospital;
+import com.hospitalms.model.Speciality;
 import com.hospitalms.repository.HospitalRepository;
+import com.hospitalms.repository.SpecialityRepository;
 
 
 @Service("hospitalService")
+@Transactional
 public class HospitalService {	
 		
 	private static final Logger LOG = LoggerFactory.getLogger(HospitalService.class);
 
 	@Autowired
 	HospitalRepository hospitalRepository;
+	
+	
+	@Autowired
+	SpecialityRepository specialityRepository;
 	
 	@Autowired
 	ModelMapper mapper;
@@ -36,12 +45,16 @@ public class HospitalService {
 	}
 
 	public HospitalDto getHospital(Integer id) {
-		return mapper.map(hospitalRepository.findById(id),HospitalDto.class);
+		return mapper.map(hospitalRepository.findById(id).get(),HospitalDto.class);
 	}
 	
 	
 	public HospitalDto addHospital(HospitalDto hospitalDto) {
-		hospitalRepository.save(mapper.map(hospitalDto,Hospital.class));
+		Speciality speciality = specialityRepository.findById(hospitalDto.getSpeciality().getId()).get();
+		Hospital newHosp = mapper.map(hospitalDto,Hospital.class);
+		newHosp.setSpeciality(speciality);
+		newHosp.setActive(true);
+		hospitalRepository.save(newHosp);
 		return hospitalDto;
 	}
 	

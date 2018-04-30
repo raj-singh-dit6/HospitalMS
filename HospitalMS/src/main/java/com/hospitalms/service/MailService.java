@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import com.hospitalms.model.Mail;
 
 @Service("mailService")
+@Transactional
 public class MailService {
  
 	private static final Logger LOG = LoggerFactory.getLogger(MailService.class);

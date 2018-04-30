@@ -1,6 +1,5 @@
 package com.hospitalms.dto;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.hospitalms.model.Hospital;
@@ -20,7 +19,5 @@ public class RoomDto {
 	private Float perDayCharge;
 	private Hospital hospital;
 	private Set<Patient> patients;
-	private LocalDateTime createDateTime;
-	private LocalDateTime updateDateTime;
 	
 }

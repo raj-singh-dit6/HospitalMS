@@ -1,10 +1,7 @@
 package com.hospitalms.service;
 
-import java.util.Date;
 import java.util.UUID;
 
-import org.hibernate.Hibernate;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,7 @@ import com.hospitalms.repository.UserRepository;
 import com.hospitalms.repository.UserSessionRepository;
 
 @Service("userSessionService")
+@Transactional
 public class UserSessionService {
 
 private static final Logger LOG = LoggerFactory.getLogger(UserSessionService.class);

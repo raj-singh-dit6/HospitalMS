@@ -1,12 +1,10 @@
 package com.hospitalms.dto;
 
-import java.time.LocalDateTime;
-
 import lombok.Data;
 
 @Data
-public class OccupancyDto {
-	
+public class SpecialityDto {
+
 	private Integer id;
 	private String type;
 }

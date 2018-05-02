@@ -9,5 +9,6 @@ public interface UserSessionRepository extends CrudRepository<UserSession, Integ
 
 	UserSession findByUser(User user);
 	UserSession findByIdAndSessionKey(Integer id, String sessionKey);
+	void deleteBySessionKey(String sessionKey);
 
 }

@@ -14,5 +14,4 @@ public class PrescriptionDto {
 	private Integer id;
 	private Doctor doctor;
 	private Patient patient;
-	private Set<Document> document;
 }

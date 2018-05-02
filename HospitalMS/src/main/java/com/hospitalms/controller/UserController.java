@@ -90,7 +90,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public CrudResponse deleteUser(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		try {

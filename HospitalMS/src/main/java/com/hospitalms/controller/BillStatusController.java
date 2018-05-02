@@ -90,7 +90,7 @@ public class BillStatusController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/{billStatusId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public CrudResponse deleteBillStatus(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		resp.setSuccess(false);

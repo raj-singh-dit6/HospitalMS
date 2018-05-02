@@ -3,7 +3,9 @@ package com.hospitalms.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +26,7 @@ public class DoctorController {
 
 	@Autowired
 	private DoctorService doctorService;
-
+	
 	private static final Logger LOG = LoggerFactory.getLogger(DoctorController.class);
 
 	/**
@@ -46,6 +48,23 @@ public class DoctorController {
 		return resp;
 	}
 
+	/**
+	 * Adds a Doctor record with new Doctor record values in @RequestBody doctorDto
+	 * @return
+	 */
+	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE })
+	public CrudResponse addDoctor(@RequestBody DoctorDto doctorDto) {
+		CrudResponse resp = new CrudResponse();
+		try {
+			doctorService.addDoctor(doctorDto);
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in addDoctor() ", e);
+		}
+		return resp;
+	}
 
 	/**
 	 * Updates the Doctor record with updated values in @RequestBody doctorDto
@@ -72,7 +91,7 @@ public class DoctorController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/{doctorId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public CrudResponse deleteDoctor(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		try {
@@ -99,6 +118,25 @@ public class DoctorController {
 		} catch (Exception e) {
 
 			LOG.error("Exception in getDoctors() ", e);
+		}
+		return resp;
+	}
+	
+	/**
+	 * Returns a list of Doctor records of a particular hospital.
+	 * @param   
+	 * @return
+	 */
+	@GetMapping(value = "/all/hospital/{hospitalId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Response<DoctorDto> getDoctorsByHospital(@PathVariable("hospitalId") Integer hospitalId) {
+		Response<DoctorDto> resp = new Response<DoctorDto>();
+		
+		try {
+			resp.setData(doctorService.getDoctorsByHospital(hospitalId));
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in getDoctorsByDoctor() ", e);
 		}
 		return resp;
 	}

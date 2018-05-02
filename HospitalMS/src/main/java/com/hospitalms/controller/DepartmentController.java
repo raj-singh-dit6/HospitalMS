@@ -89,7 +89,7 @@ public class DepartmentController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/{departmentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public CrudResponse deleteDepartment(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		try {

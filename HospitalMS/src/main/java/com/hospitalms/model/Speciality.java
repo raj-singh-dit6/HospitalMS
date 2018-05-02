@@ -3,8 +3,10 @@ package com.hospitalms.model;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +31,7 @@ public class Speciality {
 	private String type;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="speciality")
+	@OneToMany(mappedBy="speciality",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Hospital> hospitals;
 	
 	@CreationTimestamp

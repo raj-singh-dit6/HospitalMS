@@ -58,7 +58,9 @@ private static final Logger LOG = LoggerFactory.getLogger(UserSessionService.cla
 		
 		return result;
 	}
-
-
-
+	
+	
+	public void deleteUserSession(String sessionKey) {
+		userSessionRepository.deleteBySessionKey(sessionKey);
+	}
 }

@@ -1,10 +1,7 @@
 package com.hospitalms.dto;
 
-import java.util.Set;
-
 import com.hospitalms.model.Hospital;
 import com.hospitalms.model.Occupancy;
-import com.hospitalms.model.Patient;
 
 import lombok.Data;
 
@@ -12,12 +9,12 @@ import lombok.Data;
 public class RoomDto {
 	
 	private Integer id;
+	private String roomInfo;
 	private Occupancy occupancy;
 	private Integer totalBeds;
 	private Integer remainingBeds;
-	private boolean vacantStatus;
+	private Boolean vacantStatus;
 	private Float perDayCharge;
 	private Hospital hospital;
-	private Set<Patient> patients;
 	
 }

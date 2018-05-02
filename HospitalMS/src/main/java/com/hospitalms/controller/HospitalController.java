@@ -91,7 +91,7 @@ public class HospitalController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/{hospitalId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public CrudResponse deleteHospital(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		try {

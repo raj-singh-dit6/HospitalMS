@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,8 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
@@ -27,7 +30,10 @@ public class Room implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-
+	
+	@Column(nullable=false)
+	private String roomInfo;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "occupancy_id")
 	private Occupancy occupancy;
@@ -48,7 +54,8 @@ public class Room implements Serializable {
 	@JoinColumn(name="hosp_id", nullable=false)
 	private Hospital hospital;
 	
-	@OneToMany(mappedBy="room")
+	@JsonIgnore
+	@OneToMany(mappedBy="room",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Patient> patients;
 	
 	@CreationTimestamp

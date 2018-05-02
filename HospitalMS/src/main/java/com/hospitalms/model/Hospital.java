@@ -2,10 +2,13 @@ package com.hospitalms.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,30 +38,35 @@ public class Hospital implements Serializable{
 	private String address;
 	
 	@Column(nullable=false)
-	private boolean active;
+	private Boolean active;
 	
 	@Column(nullable=false)
 	private Long contact;
 	
 	@JsonIgnore
+	@OneToMany(mappedBy="hospital",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Doctor> doctors= new HashSet<Doctor>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="hospital",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Patient> patients = new HashSet<Patient>();
+	
 	@ManyToOne
 	@JoinColumn(name = "speciality_id",nullable=false)
 	private Speciality speciality;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="hospital")
-	private Set<Room> rooms;
+	@OneToMany(mappedBy="hospital",fetch = FetchType.LAZY)
+	private Set<Room> rooms = new HashSet<Room>();
 
 	@JsonIgnore
-	@OneToMany(mappedBy="hospital")
-	private Set<User> users;
+	@OneToMany(mappedBy="hospital",fetch = FetchType.LAZY)
+	private Set<User> users = new HashSet<User>();
 	
 	@CreationTimestamp
 	private LocalDateTime createDateTime;
 
 	@UpdateTimestamp
 	private LocalDateTime updateDateTime;
-	
-	
 	
 }

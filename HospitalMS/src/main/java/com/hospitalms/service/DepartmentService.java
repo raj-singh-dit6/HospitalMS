@@ -29,17 +29,18 @@ public class DepartmentService {
 	ModelMapper mapper;
 	
 	public List<DepartmentDto> getDepartments() {
-		List<Department> hospList=(List<Department>)departmentRepository.findAll();
-		List<DepartmentDto> hospDTOList = new ArrayList<DepartmentDto>();
-		for(Department department:hospList)
+		List<Department> departList=(List<Department>)departmentRepository.findAll();
+		List<DepartmentDto> departDTOList = new ArrayList<DepartmentDto>();
+		for(Department department:departList)
 		{
-			hospDTOList.add(mapper.map(department, DepartmentDto.class));
+			
+			departDTOList.add(mapper.map(department, DepartmentDto.class));
 		}
-		return hospDTOList;
+		return departDTOList;
 	}
 
 	public DepartmentDto getDepartment(Integer id) {
-		return mapper.map(departmentRepository.findById(id).get(),DepartmentDto.class);
+		return mapper.map(departmentRepository.findById(id).get(), DepartmentDto.class);
 	}
 	
 	

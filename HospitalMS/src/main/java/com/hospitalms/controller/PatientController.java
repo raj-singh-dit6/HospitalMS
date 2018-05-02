@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hospitalms.dto.DoctorDto;
 import com.hospitalms.dto.PatientDto;
 import com.hospitalms.model.responses.CrudResponse;
 import com.hospitalms.model.responses.Response;
@@ -47,6 +48,24 @@ public class PatientController {
 	}
 
 	/**
+	 * Adds a Patient record with new Patient record values in @RequestBody patientDto
+	 * @return
+	 */
+	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE })
+	public CrudResponse addPatient(@RequestBody PatientDto patientDto) {
+		CrudResponse resp = new CrudResponse();
+		try {
+			patientService.addPatient(patientDto);
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in addPatient() ", e);
+		}
+		return resp;
+	}
+	
+	/**
 	 * Updates the Patient record with updated values in @RequestBody patientDto
 	 * @param patientDto
 	 * @return
@@ -71,7 +90,7 @@ public class PatientController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/{patientId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public CrudResponse deletePatient(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		try {
@@ -98,6 +117,25 @@ public class PatientController {
 		} catch (Exception e) {
 
 			LOG.error("Exception in getPatients() ", e);
+		}
+		return resp;
+	}
+	
+	/**
+	 * Returns a list of Doctor records of a particular hospital.
+	 * @param   
+	 * @return
+	 */
+	@GetMapping(value = "/all/hospital/{hospitalId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Response<PatientDto> getPatientsByHospital(@PathVariable("hospitalId") Integer hospitalId) {
+		Response<PatientDto> resp = new Response<PatientDto>();
+		
+		try {
+			resp.setData(patientService.getPatientsByHospital(hospitalId));
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in getDoctorsByHospital() ", e);
 		}
 		return resp;
 	}

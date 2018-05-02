@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.hospitalms.dto.RoomDto;
 import com.hospitalms.model.Hospital;
 import com.hospitalms.model.Room;
+import com.hospitalms.repository.HospitalRepository;
 import com.hospitalms.repository.RoomRepository;
 
 @Service("roomService")
@@ -24,6 +25,9 @@ public class RoomService {
 
 	@Autowired
 	ModelMapper mapper;
+
+	@Autowired
+	HospitalRepository hospitalRepository;
 	
 	@Autowired
 	RoomRepository roomRepository;
@@ -39,17 +43,18 @@ public class RoomService {
 		return roomDTOList;
 	}
 	
-	public List<RoomDto> getRoomsByHospital(Hospital hospital) {
-		List<Room> roomList=(List<Room>)roomRepository.findAllByHospital(hospital);
+
+	public List<RoomDto> getRoomsByHospital(Integer hospitalId) {
+		Hospital hospital= hospitalRepository.findById(hospitalId).get();
+		List<Room> rooms= (List<Room>) roomRepository.findAllByHospital(hospital);
 		List<RoomDto> roomDTOList = new ArrayList<RoomDto>();
-		for(Room room:roomList)
+		for(Room room:rooms)
 		{
-			RoomDto roomDto= mapper.map(room, RoomDto.class);
-			roomDTOList.add(roomDto);
+			roomDTOList.add(mapper.map(room,RoomDto.class));
 		}
 		return roomDTOList;
 	}
-	
+
 	public RoomDto addRoom(RoomDto roomDto) {
 		Room room= mapper.map(roomDto, Room.class);
 		roomRepository.save(room);

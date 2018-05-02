@@ -17,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -44,14 +43,16 @@ public class User implements Serializable{
     @Column(length=30,nullable=false)
     private String firstName;
 
-    @Column(length=30, nullable=false)
+    @Column(length=30,nullable=true)
     private String lastName;
- 
     
-   	@Column(nullable=true)
+    @Column(nullable=true ,columnDefinition="String default ''")
+    private String address;
+    
+   	@Column(nullable=true, columnDefinition = "String default ''")
     private Date dob;
        
-	@Column(length=30, nullable=false)
+	@Column(length=30,unique=true,nullable=false)
     private String email;
 	
 	@Column( nullable=false)

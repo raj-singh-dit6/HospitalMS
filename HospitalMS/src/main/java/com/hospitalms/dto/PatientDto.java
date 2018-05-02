@@ -1,14 +1,11 @@
 package com.hospitalms.dto;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
-import com.hospitalms.model.Appointment;
 import com.hospitalms.model.Doctor;
+import com.hospitalms.model.Hospital;
 import com.hospitalms.model.PatientStatus;
 import com.hospitalms.model.Room;
-import com.hospitalms.model.TestReport;
 import com.hospitalms.model.User;
 
 import lombok.Data;
@@ -16,13 +13,13 @@ import lombok.Data;
 @Data
 public class PatientDto {
 
-    private Integer id;
+	private Integer id;
 	private User user;
 	private Room room;
+	private Hospital hospital;
 	private Doctor doctor;
 	private PatientStatus patientStatus;
-	private Date admittedDate;
-	private Date discharedDate;
-    private Set<Appointment> appointments = new HashSet<Appointment>();
-    private Set<TestReport> testReports = new HashSet<TestReport>();
+	private LocalDateTime admittedDate;
+	private LocalDateTime dischargedDate;
+	private LocalDateTime attendedDate;
 }

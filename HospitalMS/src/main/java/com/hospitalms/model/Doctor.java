@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -19,6 +20,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -37,20 +40,28 @@ public class Doctor {
 	@PrimaryKeyJoinColumn
 	private User user;
 	
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private String description;
 	
 	@Column(nullable=false)
 	private boolean active;
 	
-	@OneToMany(mappedBy = "doctor")
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Appointment> appointments = new HashSet<Appointment>();
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	
+	@ManyToOne
 	@JoinColumn(name = "department_id")
 	private Department department;
 	
-	@OneToMany(mappedBy="doctor")
+	@ManyToOne
+	@JoinColumn(name = "hosp_id")
+	private Hospital hospital;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="doctor",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Patient> patients;
 	
 	

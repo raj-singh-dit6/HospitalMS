@@ -36,7 +36,7 @@ public class UserSession {
 	@PrimaryKeyJoinColumn
 	private User user;
 	
-	@Column(nullable = false)
+	@Column(nullable = false,unique=true)
 	private String sessionKey;
 	
 	@Column(nullable = false)

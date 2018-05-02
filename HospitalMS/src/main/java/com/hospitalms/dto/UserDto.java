@@ -19,10 +19,10 @@ public class UserDto {
     private String password;
     private String firstName;
     private String lastName;
+    private String address;
     private Date dob;
     private String email;
     private Long contact;
-    private Set<Role> userRoles = new HashSet<Role>();
 	private Hospital hospital;
 	private Patient patient;
 	private UserSession userSession;

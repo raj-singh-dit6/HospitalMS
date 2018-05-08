@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,7 +37,7 @@ public class Document implements Serializable{
     @Column(length=255, nullable=false)
     private String location;
     
-    @ManyToOne(optional = true)
+    @ManyToOne(fetch=FetchType.LAZY,optional = true)
     @JoinColumn(name = "prescription_id")
     private Prescription  prescription;
      

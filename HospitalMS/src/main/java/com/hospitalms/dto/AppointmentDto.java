@@ -1,9 +1,11 @@
 package com.hospitalms.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hospitalms.model.Doctor;
 import com.hospitalms.model.Patient;
+import com.hospitalms.utility.CustomDateSerializer;
 
 import lombok.Data;
 
@@ -13,5 +15,7 @@ public class AppointmentDto {
 	private Integer id;
 	private Doctor doctor;
 	private Patient patient;
-	private LocalDateTime appoinmentDateTime;
+	
+	@JsonSerialize(using = CustomDateSerializer.class)
+	private Date appointmentDateTime;
 }

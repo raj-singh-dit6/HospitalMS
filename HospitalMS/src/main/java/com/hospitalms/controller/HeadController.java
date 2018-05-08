@@ -12,130 +12,129 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hospitalms.dto.DoctorDto;
-import com.hospitalms.dto.RoomDto;
+import com.hospitalms.dto.HeadDto;
 import com.hospitalms.model.responses.CrudResponse;
 import com.hospitalms.model.responses.Response;
 import com.hospitalms.model.responses.SingleResponse;
-import com.hospitalms.service.RoomService;
+import com.hospitalms.service.HeadService;
 
 @RestController
-@RequestMapping("/room")
-public class RoomController {
- 
+@RequestMapping("/head")
+public class HeadController {
+
 	@Autowired
-	private RoomService roomService;
+	private HeadService headService;
 	
-	private static final Logger LOG = LoggerFactory.getLogger(RoomController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HeadController.class);
 
 	/**
-	 * Returns a single Room record  corresponding to @param id.  
+	 * Returns a single Head record  corresponding to @param id.  
 	 * @param id
 	 * @return
 	 */
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public SingleResponse<RoomDto> getRoom(@PathVariable("id") Integer id) {
-		SingleResponse<RoomDto> resp = new SingleResponse<RoomDto>();
+	public SingleResponse<HeadDto> getHead(@PathVariable("id") Integer id) {
+		SingleResponse<HeadDto> resp = new SingleResponse<HeadDto>();
 		
 		try {
-			resp.setData(roomService.getRoom(id));
+			resp.setData(headService.getHead(id));
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in getRoom() ", e);
+			LOG.error("Exception in getHead() ", e);
 		}
-
 		return resp;
 	}
 
 	/**
-	 * Adds a Room record with new Room record values in @RequestBody roomDto
+	 * Adds a Head record with new Head record values in @RequestBody headDto
 	 * @return
 	 */
 	@PostMapping(value = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse addRoom(@RequestBody RoomDto roomDto) {
+	public CrudResponse addHead(@RequestBody HeadDto headDto) {
 		CrudResponse resp = new CrudResponse();
-		
 		try {
-			roomService.addRoom(roomDto);
+			headService.addHead(headDto);
 			resp.setSuccess(true);
 		} catch (Exception e) {
-			LOG.error("Exception in addRoom() ", e);
+
+			LOG.error("Exception in addHead() ", e);
 		}
 		return resp;
 	}
 
 	/**
-	 * Updates the Room record with updated values in @RequestBody roomDto
-	 * @param roomDto
+	 * Updates the Head record with updated values in @RequestBody headDto
+	 * @param headDto
 	 * @return
 	 */
 	@PostMapping(value = "/update", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse updateRoom(@RequestBody RoomDto roomDto) {
+	public CrudResponse updateHead(@RequestBody HeadDto headDto) {
 		CrudResponse resp = new CrudResponse();
 		
 		try {
-			roomService.updateRoom(roomDto);
+			headService.updateHead(headDto);
 			resp.setSuccess(true);
 		} catch (Exception e) {
-			LOG.error("Exception in updateRoom() ", e);
+
+			LOG.error("Exception in updateHead() ", e);
 		}
 		return resp;
 	}
 
 	/**
-	 * Deletes a Room record corresponding to @param id.
+	 * Deletes a Head record corresponding to @param id.
 	 * @param id
 	 * @return
 	 */
 	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public CrudResponse deleteRoom(@PathVariable("id") Integer id) {
+	public CrudResponse deleteHead(@PathVariable("id") Integer id) {
 		CrudResponse resp = new CrudResponse();
 		try {
-			roomService.deleteRoom(id);
+			headService.deleteHead(id);;
 			resp.setSuccess(true);
 		} catch (Exception e) {
-			LOG.error("Exception in deleteRoom() ", e);
+
+			LOG.error("Exception in deleteHead() ", e);
 		}
 		return resp;
 	}
 	
 	/**
-	 * Returns a list of Room records.  
+	 * Returns a list of Head records.  
 	 * @return
 	 */
 	@GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public Response<RoomDto> getOccupancies() {
-		Response<RoomDto> resp = new Response<RoomDto>();
+	public Response<HeadDto> getHeads() {
+		Response<HeadDto> resp = new Response<HeadDto>();
 		
 		try {
-			resp.setData(roomService.getRooms());
+			resp.setData(headService.getHeads());
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in getOccupancies() ", e);
+			LOG.error("Exception in getHeads() ", e);
 		}
 		return resp;
 	}
 	
-	
 	/**
-	 * Returns a list of rooms records of a particular hospital.
+	 * Returns a list of Head records of a particular hospital.
 	 * @param   
 	 * @return
 	 */
-	@GetMapping(value = "/all/hospital/{hospitalId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public Response<RoomDto> getDoctorsByHospital(@PathVariable("hospitalId") Integer hospitalId) {
-		Response<RoomDto> resp = new Response<RoomDto>();
+	@GetMapping(value = "/hospital/{hospitalId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public SingleResponse<HeadDto> getHeadByHospital(@PathVariable("hospitalId") Integer hospitalId) {
+		SingleResponse<HeadDto> resp = new SingleResponse<HeadDto>();
 		
 		try {
-			resp.setData(roomService.getRoomsByHospital(hospitalId));
+			resp.setData(headService.getHeadByHospital(hospitalId));
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in getDoctorsByDoctor() ", e);
+			LOG.error("Exception in getHeadByHospital() ", e);
 		}
 		return resp;
 	}

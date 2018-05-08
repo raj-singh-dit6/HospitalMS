@@ -1,6 +1,6 @@
 package com.hospitalms.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.hospitalms.model.Doctor;
 import com.hospitalms.model.Hospital;
@@ -19,7 +19,7 @@ public class PatientDto {
 	private Hospital hospital;
 	private Doctor doctor;
 	private PatientStatus patientStatus;
-	private LocalDateTime admittedDate;
-	private LocalDateTime dischargedDate;
-	private LocalDateTime attendedDate;
+	private Date admittedDate;
+	private Date dischargedDate;
+	private Date attendedDate;
 }

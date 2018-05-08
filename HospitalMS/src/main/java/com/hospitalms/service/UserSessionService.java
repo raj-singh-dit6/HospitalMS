@@ -38,6 +38,7 @@ private static final Logger LOG = LoggerFactory.getLogger(UserSessionService.cla
 		result.setLastName(user.getLastName());
 		result.setUserName(userName);
 		result.setRoles(user.getUserRoles());
+		result.setHospital(user.getHospital());
 		
 		if(userSess!=null)
 		{

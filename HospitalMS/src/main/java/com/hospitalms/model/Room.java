@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,7 +33,8 @@ public class Room implements Serializable {
 	@Column(nullable=false)
 	private String roomInfo;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
+	@ManyToOne
 	@JoinColumn(name = "occupancy_id")
 	private Occupancy occupancy;
 	
@@ -45,11 +45,12 @@ public class Room implements Serializable {
 	private Integer remainingBeds;
 	
 	@Column(nullable=false)
-	private boolean vacantStatus;
+	private boolean vacant=true;
 	
 	@Column(nullable=false)
 	private Float perDayCharge;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="hosp_id", nullable=false)
 	private Hospital hospital;

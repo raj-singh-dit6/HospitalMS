@@ -12,9 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hospitalms.dto.UserDto;
-import com.hospitalms.model.Role;
+import com.hospitalms.model.Hospital;
 import com.hospitalms.model.User;
 import com.hospitalms.model.UserSession;
+import com.hospitalms.repository.HospitalRepository;
 import com.hospitalms.repository.UserRepository;
 import com.hospitalms.repository.UserSessionRepository;
 
@@ -30,7 +31,9 @@ public class UserService{
 	@Autowired
 	DoctorService doctorService;
 	
-
+	@Autowired
+	HospitalRepository hospitalRepository;
+	
 	@Autowired
 	PatientService patientService;
 	
@@ -56,7 +59,7 @@ public class UserService{
 		}
 		return hospDTOList;
 	}
-
+	
 	public UserDto getUser(Integer id) {
 		return mapper.map(userRepository.findById(id).get(),UserDto.class);
 	}

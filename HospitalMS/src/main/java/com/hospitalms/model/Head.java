@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
@@ -16,33 +17,34 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
-@Entity
+
 @Data
-public class UserSession implements Serializable{
+@Entity
+public class Head implements Serializable{
 	
 	@GenericGenerator(name = "generator", strategy = "foreign", 
 	parameters = @Parameter(name = "property", value = "user"))
 	@Id
 	@GeneratedValue(generator = "generator")
 	@Column(nullable = false)
-    private Integer id;
- 
-	@OneToOne(fetch = FetchType.LAZY)
+	private Integer id;
+	
+	@OneToOne(fetch = FetchType.LAZY,orphanRemoval=true)
 	@PrimaryKeyJoinColumn
 	private User user;
 	
-	@Column(nullable = false,unique=true)
-	private String sessionKey;
-	
-	@Column(nullable = false)
-	private boolean active;
+	@JsonIgnore
+	@OneToOne
+	@JoinColumn(name = "hosp_id",nullable = false) 
+	private Hospital hospital;
 	
 	@CreationTimestamp
 	private LocalDateTime createDateTime;
-
+	
 	@UpdateTimestamp
 	private LocalDateTime updateDateTime;
-
 }

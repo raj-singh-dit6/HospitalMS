@@ -1,5 +1,6 @@
 package com.hospitalms.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Bill {
+public class Bill implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

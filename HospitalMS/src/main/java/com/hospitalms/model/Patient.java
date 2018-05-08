@@ -1,5 +1,6 @@
 package com.hospitalms.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -8,7 +9,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -23,12 +23,14 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hospitalms.utility.CustomDateSerializer;
 
 import lombok.Data;
 
 @Entity
 @Data
-public class Patient {
+public class Patient implements Serializable{
 
 	@GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "user"))
 	@Id
@@ -36,7 +38,7 @@ public class Patient {
 	@Column(nullable = false)
 	private Integer id;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(orphanRemoval=true)
 	@PrimaryKeyJoinColumn
 	private User user;
 
@@ -50,30 +52,31 @@ public class Patient {
 	private Hospital hospital;
 
 	@JsonIgnore
-	@ManyToOne(optional=true)
-	@JoinColumn(name = "doctor_id")
-	private Doctor doctor;
-
-	@JsonIgnore
+	@OneToMany(mappedBy = "patient")
+	private Set<PatientDoctor> patientDoctors= new HashSet<PatientDoctor>();
+	
 	@ManyToOne
 	@JoinColumn(name = "patient_status_id",nullable = false)
 	private PatientStatus patientStatus;
 
+	@JsonSerialize(using = CustomDateSerializer.class)
 	@Column
-	private LocalDateTime admittedDate;
+	private Date admittedDate;
 
+	@JsonSerialize(using = CustomDateSerializer.class)
 	@Column
-	private LocalDateTime dischargedDate;
+	private Date dischargedDate;
 
+	@JsonSerialize(using = CustomDateSerializer.class)
 	@Column
-	private LocalDateTime attendedDate;
+	private Date attendedDate;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
 	private Set<Appointment> appointments = new HashSet<Appointment>();
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
 	private Set<TestReport> testReports = new HashSet<TestReport>();
 
 	@CreationTimestamp

@@ -46,13 +46,20 @@ public class DoctorService {
 	ModelMapper mapper;
 	
 	public List<DoctorDto> getDoctors() {
-		List<Doctor> doctorList=(List<Doctor>)doctorRepository.findAll();
+		List<Doctor>	doctorList=(List<Doctor>)doctorRepository.findAll();
 		List<DoctorDto> doctorDTOList = new ArrayList<DoctorDto>();
 		for(Doctor doctor:doctorList)
 		{
-			doctorDTOList.add(mapper.map(doctor, DoctorDto.class));
+			DoctorDto doctorDto= new DoctorDto();
+			doctorDto.setId(doctor.getId());
+			doctorDto.setDepartment(doctor.getDepartment());
+			doctorDto.setUser(doctor.getUser());
+			doctorDto.setHospital(doctor.getHospital());
+			doctorDto.setActive(doctor.isActive());
+			doctorDTOList.add(doctorDto);
 		}
 		return doctorDTOList;
+
 	}
 	
 	public List<DoctorDto> getDoctorsByHospital(Integer hospitalId) {
@@ -61,13 +68,26 @@ public class DoctorService {
 		List<DoctorDto> doctorDTOList = new ArrayList<DoctorDto>();
 		for(Doctor doctor:doctorList)
 		{
-			doctorDTOList.add(mapper.map(doctor, DoctorDto.class));
+			DoctorDto doctorDto= new DoctorDto();
+			doctorDto.setId(doctor.getId());
+			doctorDto.setDepartment(doctor.getDepartment());
+			doctorDto.setUser(doctor.getUser());
+			doctorDto.setHospital(doctor.getHospital());
+			doctorDto.setActive(doctor.isActive());
+			doctorDTOList.add(doctorDto);
 		}
 		return doctorDTOList;
 	}
 
 	public DoctorDto getDoctor(Integer id) {
-		return mapper.map(doctorRepository.findById(id).get(),DoctorDto.class);
+		Doctor doctor=doctorRepository.findById(id).get();
+		DoctorDto doctorDto= new DoctorDto();
+		doctorDto.setId(doctor.getId());
+		doctorDto.setDepartment(doctor.getDepartment());
+		doctorDto.setUser(doctor.getUser());
+		doctorDto.setHospital(doctor.getHospital());
+		doctorDto.setActive(doctor.isActive());
+		return doctorDto;
 	}
 	
 	

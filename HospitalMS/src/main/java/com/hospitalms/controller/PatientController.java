@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hospitalms.dto.DoctorDto;
 import com.hospitalms.dto.PatientDto;
 import com.hospitalms.model.responses.CrudResponse;
 import com.hospitalms.model.responses.Response;
@@ -84,6 +83,22 @@ public class PatientController {
 		}
 		return resp;
 	}
+	
+	@PostMapping(value = "/assign/doctor", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE })
+	public CrudResponse assignDoctor(@RequestBody PatientDto patientDto) {
+		CrudResponse resp = new CrudResponse();
+		resp.setSuccess(false);
+		try {
+			patientService.assignDoctor(patientDto);
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in updatePatient() ", e);
+		}
+		return resp;
+	}
+
 
 	/**
 	 * Deletes a Patient record corresponding to @param id.

@@ -63,16 +63,28 @@ public class User implements Serializable{
     @JoinTable(name = "userRole", 
              joinColumns = { @JoinColumn(name = "userId") }, 
              inverseJoinColumns = { @JoinColumn(name = "roleId") })
-    private Set<Role> userRoles = new HashSet<Role>();
+	private Set<Role> userRoles = new HashSet<Role>();
+	
 
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="hosp_id")
 	private Hospital hospital;
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToOne(mappedBy = "user", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+	private Doctor doctor;
+	
+	@JsonIgnore
+	@OneToOne(mappedBy = "user", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
 	private Patient patient;
 	
-	@OneToOne(mappedBy="user")
+	@JsonIgnore
+	@OneToOne(mappedBy = "user", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+	private Head head;
+	
+	@JsonIgnore
+	@OneToOne(mappedBy="user",fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
 	private UserSession userSession;
 	 
 	@CreationTimestamp

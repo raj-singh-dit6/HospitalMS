@@ -1,5 +1,6 @@
 package com.hospitalms.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -22,17 +23,17 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Prescription {
+public class Prescription implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "doctor_id")  
 	private Doctor doctor;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")  
 	private Patient patient;
 	

@@ -1,5 +1,6 @@
 package com.hospitalms.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -15,7 +16,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class BillStatus {
+public class BillStatus implements Serializable{
 
 
 	@Id

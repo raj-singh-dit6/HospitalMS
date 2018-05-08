@@ -1,10 +1,12 @@
 package com.hospitalms.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,31 +16,26 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-
 import lombok.Data;
 
 @Entity
 @Data
-public class Appointment {
+public class Appointment implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "doctor_id")  
 	private Doctor doctor;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "patient_id")  
 	private Patient patient;
 
 	@Column(nullable=false)
-	private LocalDateTime appoinmentDateTime;
+	private Date appointmentDateTime;
 	
 	@CreationTimestamp
 	private LocalDateTime createDateTime;

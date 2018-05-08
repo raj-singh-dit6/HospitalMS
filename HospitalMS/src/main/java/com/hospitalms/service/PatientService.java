@@ -1,30 +1,29 @@
 package com.hospitalms.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.secure.spi.PermissibleAction;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hospitalms.dto.PatientDto;
 import com.hospitalms.model.Doctor;
 import com.hospitalms.model.Hospital;
 import com.hospitalms.model.Patient;
+import com.hospitalms.model.PatientDoctor;
 import com.hospitalms.model.PatientStatus;
 import com.hospitalms.model.Role;
 import com.hospitalms.model.User;
+import com.hospitalms.repository.DoctorRepository;
 import com.hospitalms.repository.HospitalRepository;
+import com.hospitalms.repository.PatientDoctorRepository;
 import com.hospitalms.repository.PatientRepository;
 import com.hospitalms.repository.RoleRepository;
 import com.hospitalms.repository.UserRepository;
@@ -40,7 +39,13 @@ public class PatientService {
 	PatientRepository patientRepository;
 	
 	@Autowired
+	DoctorRepository doctorRepository;
+	
+	@Autowired
 	HospitalRepository hospitalRepository;
+	
+	@Autowired
+	PatientDoctorRepository patientDoctorRepository;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -65,9 +70,8 @@ public class PatientService {
 			patientDto.setAdmittedDate(patient.getAdmittedDate());
 			patientDto.setAttendedDate(patientDto.getAttendedDate());
 			patientDto.setDischargedDate(patient.getDischargedDate());
-			patientDto.setDoctor(patient.getDoctor());
 			
-			//patientDTOList.add(mapper.map(patient, PatientDto.class));
+			patientDTOList.add(patientDto);
 		}
 		return patientDTOList;
 	}
@@ -88,11 +92,9 @@ public class PatientService {
 			patientDto.setAdmittedDate(patient.getAdmittedDate());
 			patientDto.setAttendedDate(patientDto.getAttendedDate());
 			patientDto.setDischargedDate(patient.getDischargedDate());
-			patientDto.setDoctor(patient.getDoctor());
 			
 			patientDTOList.add(patientDto);
 			
-		//	patientDTOList.add(mapper.map(patient, PatientDto.class));
 		}
 		return patientDTOList;
 	}
@@ -108,10 +110,7 @@ public class PatientService {
 		patientDto.setAdmittedDate(patient.getAdmittedDate());
 		patientDto.setAttendedDate(patientDto.getAttendedDate());
 		patientDto.setDischargedDate(patient.getDischargedDate());
-		patientDto.setDoctor(patient.getDoctor());
-		
 		return patientDto;
-		//return mapper.map(patientRepository.findById(id).get(),PatientDto.class);
 	}
 	
 	
@@ -163,12 +162,30 @@ public class PatientService {
 	public void setPatientStatusDate(Patient patient,PatientStatus patientStatus)
 	{
 		if(patientStatus.getName().equalsIgnoreCase("admitted")) {
-			patient.setAdmittedDate(LocalDateTime.now());
+			patient.setAdmittedDate(new Date());
 		}else if(patientStatus.getName().equalsIgnoreCase("discharged")) {
-			patient.setDischargedDate(LocalDateTime.now());
+			patient.setDischargedDate(new Date());
 		}else {
-			patient.setAttendedDate(LocalDateTime.now());
+			patient.setAttendedDate(new Date());
 		}
 	}
+	
+	public PatientDto assignDoctor(PatientDto patientDto) {
+		Patient patient= patientRepository.findById(patientDto.getId()).get();
+		Doctor doctor = doctorRepository.findById(patientDto.getDoctor().getId()).get();
+		if(patientDto.getPatientStatus().getName().equalsIgnoreCase("admitted"));
+			patient.setRoom(patientDto.getRoom());	
+		
+		patient.setPatientStatus(patientDto.getPatientStatus());
+		setPatientStatusDate(patient,patient.getPatientStatus());
+		
+		PatientDoctor patientDoctor = new PatientDoctor();
+		patientDoctor.setDoctor(doctor);
+		patientDoctor.setPatient(patient);
+		patientDoctorRepository.save(patientDoctor);
+		
+		return patientDto;
+	}
+	
 
 }

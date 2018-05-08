@@ -13,7 +13,7 @@ public class RoomDto {
 	private Occupancy occupancy;
 	private Integer totalBeds;
 	private Integer remainingBeds;
-	private Boolean vacantStatus;
+	private boolean vacant;
 	private Float perDayCharge;
 	private Hospital hospital;
 	

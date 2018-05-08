@@ -1,5 +1,6 @@
 package com.hospitalms.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Doctor {
+public class Doctor implements Serializable{
 
 	@GenericGenerator(name = "generator", strategy = "foreign", 
 	parameters = @Parameter(name = "property", value = "user"))
@@ -36,7 +37,7 @@ public class Doctor {
 	@Column(nullable = false)
     private Integer id;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY,orphanRemoval=true)
 	@PrimaryKeyJoinColumn
 	private User user;
 	
@@ -61,16 +62,13 @@ public class Doctor {
 	private Hospital hospital;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="doctor",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Patient> patients;
-	
+	@OneToMany(mappedBy = "doctor")
+	private Set<PatientDoctor> patientDoctors= new HashSet<PatientDoctor>();
 	
 	@CreationTimestamp
 	private LocalDateTime createDateTime;
 	
 	@UpdateTimestamp
 	private LocalDateTime updateDateTime;
-	
-	
 	
 }

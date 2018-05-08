@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -43,6 +44,9 @@ public class Hospital implements Serializable{
 	@Column(nullable=false)
 	private Long contact;
 	
+	@OneToOne(mappedBy="hospital",cascade = CascadeType.ALL)
+	private Head head;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="hospital",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Doctor> doctors= new HashSet<Doctor>();
@@ -51,6 +55,7 @@ public class Hospital implements Serializable{
 	@OneToMany(mappedBy="hospital",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Patient> patients = new HashSet<Patient>();
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "speciality_id",nullable=false)
 	private Speciality speciality;

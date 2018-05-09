@@ -21,5 +21,5 @@ public class PatientDto {
 	private PatientStatus patientStatus;
 	private Date admittedDate;
 	private Date dischargedDate;
-	private Date attendedDate;
+	private Date reservationDate;
 }

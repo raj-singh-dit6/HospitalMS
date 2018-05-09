@@ -23,20 +23,25 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
 
 @Entity
 @Data
+@JsonInclude(Include.NON_NULL)
 public class User implements Serializable{
 	
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
  
+	@JsonIgnore
     @Column(length=30,unique=true, nullable=false)
     private String userName;
      
+    @JsonIgnore
 	@Column(length=100,nullable=false)
     private String password;
     

@@ -23,6 +23,8 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hospitalms.utility.CustomDateSerializer;
 
@@ -30,6 +32,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@JsonInclude(Include.NON_NULL)
 public class Patient implements Serializable{
 
 	@GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "user"))
@@ -69,7 +72,7 @@ public class Patient implements Serializable{
 
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@Column
-	private Date attendedDate;
+	private Date reservationDate;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)

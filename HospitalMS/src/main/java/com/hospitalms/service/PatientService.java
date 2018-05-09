@@ -1,8 +1,11 @@
 package com.hospitalms.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.transaction.Transactional;
 
@@ -14,18 +17,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hospitalms.dto.PatientDto;
+import com.hospitalms.dto.PatientStatusDailyDataSet;
 import com.hospitalms.model.Doctor;
 import com.hospitalms.model.Hospital;
 import com.hospitalms.model.Patient;
 import com.hospitalms.model.PatientDoctor;
 import com.hospitalms.model.PatientStatus;
 import com.hospitalms.model.Role;
+import com.hospitalms.model.Room;
 import com.hospitalms.model.User;
 import com.hospitalms.repository.DoctorRepository;
 import com.hospitalms.repository.HospitalRepository;
 import com.hospitalms.repository.PatientDoctorRepository;
 import com.hospitalms.repository.PatientRepository;
+import com.hospitalms.repository.PatientStatusRepository;
 import com.hospitalms.repository.RoleRepository;
+import com.hospitalms.repository.RoomRepository;
 import com.hospitalms.repository.UserRepository;
 
 
@@ -37,6 +44,13 @@ public class PatientService {
 
 	@Autowired
 	PatientRepository patientRepository;
+	
+	@Autowired
+	PatientStatusRepository patientStatusRepository;
+	
+	@Autowired
+	RoomRepository roomRepository;
+	
 	
 	@Autowired
 	DoctorRepository doctorRepository;
@@ -56,6 +70,67 @@ public class PatientService {
 	@Autowired
 	ModelMapper mapper;
 	
+	public PatientStatusDailyDataSet getPatientsDailyStatus(Integer hospitalId) {
+		Hospital hospital = hospitalRepository.findById(hospitalId).get();
+		List<Patient>	patientList=(List<Patient>)patientRepository.findAllByHospital(hospital);
+		Map<Integer,Integer> admittedMap = new TreeMap<Integer,Integer>();
+		Map<Integer,Integer> dischargedMap = new TreeMap<Integer,Integer>();
+		for(Date date:getDaysOfMonth())
+		{
+			Calendar dayCal = Calendar.getInstance();
+			dayCal.setTime(date);
+			for(Patient patient:patientList)
+			{
+				if(!admittedMap.containsKey(dayCal.get(Calendar.DATE)))
+				{
+					admittedMap.put(dayCal.get(Calendar.DATE), 0);
+				}
+				
+				if( !dischargedMap.containsKey(dayCal.get(Calendar.DATE)))
+				{
+					dischargedMap.put(dayCal.get(Calendar.DATE), 0);
+				}
+				
+				Calendar admittedCal = Calendar.getInstance();
+				Calendar dischargedCal = Calendar.getInstance();
+				
+				if(patient.getAdmittedDate()!=null)
+				{
+					admittedCal.setTime(patient.getAdmittedDate());
+					if(dayCal.get(Calendar.DATE)==admittedCal.get(Calendar.DATE))
+					{
+						admittedMap.put(dayCal.get(Calendar.DATE), admittedMap.get(dayCal.get(Calendar.DATE))+1);
+					}
+					
+				} 
+				
+				if(patient.getDischargedDate()!=null) {
+				
+					dischargedCal.setTime(patient.getDischargedDate());
+					if(dayCal.get(Calendar.DATE)==dischargedCal.get(Calendar.DATE))
+					{
+						dischargedMap.put(dayCal.get(Calendar.DATE), dischargedMap.get(dayCal.get(Calendar.DATE))+1);
+					}
+				}
+				
+			}
+		}
+		
+		List<Integer> dischargedValues= new ArrayList<Integer>(dischargedMap.values());
+		List<Integer> admittedValues = new ArrayList<Integer>(admittedMap.values());
+
+		System.err.println(admittedValues);
+		System.err.println(dischargedValues);
+		
+		
+		PatientStatusDailyDataSet patientStatusDailyDataSet = new PatientStatusDailyDataSet();
+		patientStatusDailyDataSet.setAdmittedList(admittedValues);
+		patientStatusDailyDataSet.setDischargedList(dischargedValues);
+		
+		return patientStatusDailyDataSet;
+	}
+	
+	
 	public List<PatientDto> getPatients() {
 		List<Patient> patientList=(List<Patient>)patientRepository.findAll();
 		List<PatientDto> patientDTOList = new ArrayList<PatientDto>();
@@ -68,7 +143,7 @@ public class PatientService {
 			patientDto.setHospital(patient.getHospital());
 			patientDto.setRoom(patient.getRoom());
 			patientDto.setAdmittedDate(patient.getAdmittedDate());
-			patientDto.setAttendedDate(patientDto.getAttendedDate());
+			patientDto.setReservationDate(patient.getReservationDate());
 			patientDto.setDischargedDate(patient.getDischargedDate());
 			
 			patientDTOList.add(patientDto);
@@ -90,7 +165,7 @@ public class PatientService {
 			patientDto.setHospital(patient.getHospital());
 			patientDto.setRoom(patient.getRoom());
 			patientDto.setAdmittedDate(patient.getAdmittedDate());
-			patientDto.setAttendedDate(patientDto.getAttendedDate());
+			patientDto.setReservationDate(patient.getReservationDate());
 			patientDto.setDischargedDate(patient.getDischargedDate());
 			
 			patientDTOList.add(patientDto);
@@ -99,6 +174,52 @@ public class PatientService {
 		return patientDTOList;
 	}
 
+	
+	public List<PatientDto> getPatientsByRoom(Integer roomId) {
+		Room room = roomRepository.findById(roomId).get();
+		List<Patient>	patientList=(List<Patient>)patientRepository.findAllByRoom(room);
+		List<PatientDto> patientDTOList = new ArrayList<PatientDto>();
+		for(Patient patient:patientList)
+		{
+			PatientDto patientDto = new PatientDto();
+			patientDto.setId(patient.getId());
+			patientDto.setPatientStatus(patient.getPatientStatus());
+			patientDto.setUser(patient.getUser());
+			patientDto.setHospital(patient.getHospital());
+			patientDto.setRoom(patient.getRoom());
+			patientDto.setAdmittedDate(patient.getAdmittedDate());
+			patientDto.setReservationDate(patient.getReservationDate());
+			patientDto.setDischargedDate(patient.getDischargedDate());
+			
+			patientDTOList.add(patientDto);
+			
+		}
+		return patientDTOList;
+	}
+	
+	public List<PatientDto> getPatientsByDoctor(Integer doctorId) {
+		Doctor doctor = doctorRepository.findById(doctorId).get();
+		List<PatientDoctor>	patientDoctorList=(List<PatientDoctor>)patientDoctorRepository.findAllByDoctor(doctor);
+		List<PatientDto> patientDTOList = new ArrayList<PatientDto>();
+		for(PatientDoctor patientDoctor:patientDoctorList)
+		{
+			Patient patient=patientDoctor.getPatient();
+			PatientDto patientDto = new PatientDto();
+			patientDto.setId(patient.getId());
+			patientDto.setPatientStatus(patient.getPatientStatus());
+			patientDto.setUser(patient.getUser());
+			patientDto.setHospital(patient.getHospital());
+			patientDto.setRoom(patient.getRoom());
+			patientDto.setAdmittedDate(patient.getAdmittedDate());
+			patientDto.setReservationDate(patient.getReservationDate());
+			patientDto.setDischargedDate(patient.getDischargedDate());
+			
+			patientDTOList.add(patientDto);
+			
+		}
+		return patientDTOList;
+	}
+	
 	public PatientDto getPatient(Integer id) {
 		Patient patient = patientRepository.findById(id).get();
 		PatientDto patientDto = new PatientDto();
@@ -108,7 +229,7 @@ public class PatientService {
 		patientDto.setHospital(patient.getHospital());
 		patientDto.setRoom(patient.getRoom());
 		patientDto.setAdmittedDate(patient.getAdmittedDate());
-		patientDto.setAttendedDate(patientDto.getAttendedDate());
+		patientDto.setReservationDate(patient.getReservationDate());
 		patientDto.setDischargedDate(patient.getDischargedDate());
 		return patientDto;
 	}
@@ -116,6 +237,7 @@ public class PatientService {
 	
 	public PatientDto addPatient(PatientDto patientDto) {
 			Role role=roleRepository.findByType("PATIENT");
+			PatientStatus patientStatus= patientStatusRepository.findByName("Attended");
 			User user = new User();
 			user.setUserName(patientDto.getUser().getEmail());
 			user.setFirstName(patientDto.getUser().getFirstName());
@@ -129,8 +251,6 @@ public class PatientService {
 			
 			Patient patient = mapper.map(patientDto, Patient.class);
 			patient.setUser(user);
-			setPatientStatusDate(patient,patient.getPatientStatus());
-			
 			patientRepository.save(patient);
 			return patientDto;
 	}
@@ -144,9 +264,6 @@ public class PatientService {
 		user.setContact(patientDto.getUser().getContact());
 		user.setDob(patientDto.getUser().getDob());
 		user.setHospital(patientDto.getHospital());
-		
-		patient.setPatientStatus(patientDto.getPatientStatus());
-		setPatientStatusDate(patient,patient.getPatientStatus());
 		return patientDto;
 	}
 	
@@ -161,23 +278,29 @@ public class PatientService {
 	 */
 	public void setPatientStatusDate(Patient patient,PatientStatus patientStatus)
 	{
-		if(patientStatus.getName().equalsIgnoreCase("admitted")) {
-			patient.setAdmittedDate(new Date());
-		}else if(patientStatus.getName().equalsIgnoreCase("discharged")) {
-			patient.setDischargedDate(new Date());
-		}else {
-			patient.setAttendedDate(new Date());
-		}
+		Room room=patient.getRoom();
+		if(room!=null) {
+			room=roomRepository.findById(patient.getRoom().getId()).get();
+			if(patientStatus.getName().equalsIgnoreCase("admitted")) {
+				if(room.getRemainingBeds()>0)
+					room.setRemainingBeds(room.getTotalBeds()-1);
+				patient.setAdmittedDate(new Date());
+				room.setVacant(room.getTotalBeds()<room.getRemainingBeds());
+				
+			}else if(patientStatus.getName().equalsIgnoreCase("discharged")) {
+				if(room.getTotalBeds()<=room.getRemainingBeds())
+					room.setRemainingBeds(room.getRemainingBeds()+1);
+				patient.setDischargedDate(new Date());
+				room.setVacant(room.getTotalBeds()<room.getRemainingBeds());
+			}else {
+				patient.setReservationDate(new Date());
+			}
+	   }
 	}
 	
 	public PatientDto assignDoctor(PatientDto patientDto) {
 		Patient patient= patientRepository.findById(patientDto.getId()).get();
 		Doctor doctor = doctorRepository.findById(patientDto.getDoctor().getId()).get();
-		if(patientDto.getPatientStatus().getName().equalsIgnoreCase("admitted"));
-			patient.setRoom(patientDto.getRoom());	
-		
-		patient.setPatientStatus(patientDto.getPatientStatus());
-		setPatientStatusDate(patient,patient.getPatientStatus());
 		
 		PatientDoctor patientDoctor = new PatientDoctor();
 		patientDoctor.setDoctor(doctor);
@@ -187,5 +310,28 @@ public class PatientService {
 		return patientDto;
 	}
 	
+	public PatientDto assignRoom(PatientDto patientDto) {
+		Patient patient= patientRepository.findById(patientDto.getId()).get();
+		patient.setRoom(patientDto.getRoom());	
+		patient.setPatientStatus(patientDto.getPatientStatus());
+		setPatientStatusDate(patient,patient.getPatientStatus());
+		
+		return patientDto;
+	}
+	
+	public List<Date> getDaysOfMonth() {
+		List<Date> daysOfMonth= new ArrayList<Date>();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.set(Calendar.DAY_OF_MONTH, 1); 
+		int myMonth=cal.get(Calendar.MONTH);
+	
+		while (myMonth==cal.get(Calendar.MONTH)) {
+		  System.err.print(cal.getTime());
+		  daysOfMonth.add(cal.getTime());
+		  cal.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		return daysOfMonth;
+	}
 
 }

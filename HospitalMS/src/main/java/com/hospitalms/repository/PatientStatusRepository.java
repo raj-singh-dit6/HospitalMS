@@ -6,4 +6,6 @@ import com.hospitalms.model.PatientStatus;
 
 public interface PatientStatusRepository extends CrudRepository<PatientStatus, Integer>{
 
+	PatientStatus findByName(String string);
+
 }

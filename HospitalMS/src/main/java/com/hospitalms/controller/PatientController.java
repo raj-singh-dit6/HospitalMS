@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hospitalms.dto.PatientDto;
+import com.hospitalms.dto.PatientStatusDailyDataSet;
 import com.hospitalms.model.responses.CrudResponse;
 import com.hospitalms.model.responses.Response;
 import com.hospitalms.model.responses.SingleResponse;
@@ -98,6 +99,21 @@ public class PatientController {
 		}
 		return resp;
 	}
+	
+	@PostMapping(value = "/assign/room", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE })
+	public CrudResponse assignRoom(@RequestBody PatientDto patientDto) {
+		CrudResponse resp = new CrudResponse();
+		resp.setSuccess(false);
+		try {
+			patientService.assignRoom(patientDto);
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in updatePatient() ", e);
+		}
+		return resp;
+	}
 
 
 	/**
@@ -151,6 +167,63 @@ public class PatientController {
 		} catch (Exception e) {
 
 			LOG.error("Exception in getDoctorsByHospital() ", e);
+		}
+		return resp;
+	}
+	
+	/**
+	 * Returns a list of Doctor records of a particular hospital.
+	 * @param   
+	 * @return
+	 */
+	@GetMapping(value = "/all/doctor/{doctorId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Response<PatientDto> getPatientsByDoctor(@PathVariable("doctorId") Integer doctorId) {
+		Response<PatientDto> resp = new Response<PatientDto>();
+		
+		try {
+			resp.setData(patientService.getPatientsByDoctor(doctorId));
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in getPatientsByDoctor() ", e);
+		}
+		return resp;
+	}
+	
+	/**
+	 * Returns a list of Doctor records of a particular hospital.
+	 * @param   
+	 * @return
+	 */
+	@GetMapping(value = "/all/room/{roomId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Response<PatientDto> getPatientsByRoom(@PathVariable("roomId") Integer roomId) {
+		Response<PatientDto> resp = new Response<PatientDto>();
+		
+		try {
+			resp.setData(patientService.getPatientsByRoom(roomId));
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in getPatientsByRoom() ", e);
+		}
+		return resp;
+	}
+	
+	/**
+	 * Returns a daily count of patient status in hospital @PathVariable hospitalId for current month.
+	 * @param   
+	 * @return
+	 */
+	@GetMapping(value = "/all/status/daily/{hospitalId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public SingleResponse<PatientStatusDailyDataSet> getPatientsDailyStatus(@PathVariable("hospitalId") Integer hospitalId) {
+		SingleResponse<PatientStatusDailyDataSet> resp = new SingleResponse<PatientStatusDailyDataSet>();
+		
+		try {
+			resp.setData(patientService.getPatientsDailyStatus(hospitalId));
+			resp.setSuccess(true);
+		} catch (Exception e) {
+
+			LOG.error("Exception in getPatientsDailyStatus() ", e);
 		}
 		return resp;
 	}

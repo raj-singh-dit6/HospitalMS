@@ -5,11 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hospitalms.dto.Chart;
 import com.hospitalms.dto.ChartData;
@@ -53,7 +52,7 @@ public class ChartService {
 		{
 			ChartData chartData = new ChartData();
 			Integer totalPatientsByMonth=0;
-			List<Patient> patients=patientRepository.findAllByHospital(hospital);
+			List<Patient> patients=patientRepository.findAllAdmittedPatientsByHospital(hospital);
 			for(Patient patient:patients)
 			{
 				Calendar cal1 = Calendar.getInstance();

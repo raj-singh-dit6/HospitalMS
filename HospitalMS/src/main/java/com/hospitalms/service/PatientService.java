@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.transaction.Transactional;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hospitalms.dto.PatientDto;
 import com.hospitalms.dto.PatientStatusDailyDataSet;
@@ -118,10 +117,6 @@ public class PatientService {
 		
 		List<Integer> dischargedValues= new ArrayList<Integer>(dischargedMap.values());
 		List<Integer> admittedValues = new ArrayList<Integer>(admittedMap.values());
-
-		System.err.println(admittedValues);
-		System.err.println(dischargedValues);
-		
 		
 		PatientStatusDailyDataSet patientStatusDailyDataSet = new PatientStatusDailyDataSet();
 		patientStatusDailyDataSet.setAdmittedList(admittedValues);
@@ -251,6 +246,7 @@ public class PatientService {
 			
 			Patient patient = mapper.map(patientDto, Patient.class);
 			patient.setUser(user);
+			patient.setPatientStatus(patientStatus);
 			patientRepository.save(patient);
 			return patientDto;
 	}

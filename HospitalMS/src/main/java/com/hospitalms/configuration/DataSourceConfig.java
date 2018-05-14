@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -28,7 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories("com.hospitalms.repository")
 public class DataSourceConfig {
 
-  private static final Logger LOG = LoggerFactory.getLogger(DataSourceConfig.class);
+   private static final Logger LOG = LoggerFactory.getLogger(DataSourceConfig.class);
 	
    @Autowired
    private Environment springEnvironment;
@@ -68,7 +67,6 @@ public class DataSourceConfig {
       properties.put("hibernate.hbm2ddl.auto", springEnvironment.getProperty("hibernate.hbm2ddl.auto", "update"));
       properties.put("hibernate.id.new_generator_mappings", springEnvironment.getProperty("hibernate.id.new_generator_mappings", "false"));
       properties.put("hibernate.physical_naming_strategy", "com.hospitalms.configuration.CustomNamingStrategy");
-      
       
       return properties;
    }

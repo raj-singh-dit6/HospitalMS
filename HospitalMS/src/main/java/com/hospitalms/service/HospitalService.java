@@ -3,15 +3,13 @@ package com.hospitalms.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.hospitalms.dto.DoctorDto;
 import com.hospitalms.dto.HospitalDto;
 import com.hospitalms.model.Hospital;
 import com.hospitalms.model.Speciality;

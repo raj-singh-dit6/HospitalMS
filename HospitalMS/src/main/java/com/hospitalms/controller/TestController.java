@@ -106,7 +106,7 @@ public class TestController {
 	 * @return
 	 */
 	@GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public Response<TestDto> getOccupancies() {
+	public Response<TestDto> getTests() {
 		Response<TestDto> resp = new Response<TestDto>();
 		
 		try {
@@ -114,7 +114,7 @@ public class TestController {
 			resp.setSuccess(true);
 		} catch (Exception e) {
 
-			LOG.error("Exception in getOccupancies() ", e);
+			LOG.error("Exception in getTests() ", e);
 		}
 		return resp;
 	}

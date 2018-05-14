@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -73,6 +74,11 @@ public class Patient implements Serializable{
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@Column
 	private Date reservationDate;
+	
+
+	@JsonIgnore
+	@OneToMany(mappedBy="patient",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Bill> bills= new HashSet<Bill>();
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)

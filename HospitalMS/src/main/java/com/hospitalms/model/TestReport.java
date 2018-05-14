@@ -37,8 +37,8 @@ public class TestReport implements Serializable{
 	@JoinColumn(name="patient_id", nullable=false)
 	private Patient patient;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="bill_id", nullable=false)
+	@ManyToOne(fetch=FetchType.LAZY,optional=true)
+	@JoinColumn(name="bill_id")
 	private Bill bill;
 	
 	@CreationTimestamp

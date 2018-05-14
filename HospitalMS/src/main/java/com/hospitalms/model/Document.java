@@ -40,6 +40,10 @@ public class Document implements Serializable{
     @ManyToOne(fetch=FetchType.LAZY,optional = true)
     @JoinColumn(name = "prescription_id")
     private Prescription  prescription;
+    
+    @ManyToOne(fetch=FetchType.LAZY,optional = true)
+    @JoinColumn(name = "test_report_id")
+    private TestReport  testReport;
      
 	@CreationTimestamp
 	private LocalDateTime createDateTime;

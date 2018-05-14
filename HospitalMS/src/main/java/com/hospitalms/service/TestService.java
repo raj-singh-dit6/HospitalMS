@@ -3,13 +3,12 @@ package com.hospitalms.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hospitalms.dto.TestDto;
 import com.hospitalms.model.Test;
@@ -29,13 +28,13 @@ public class TestService {
 	ModelMapper mapper;
 	
 	public List<TestDto> getTests() {
-		List<Test> hospList=(List<Test>)testRepository.findAll();
-		List<TestDto> hospDTOList = new ArrayList<TestDto>();
-		for(Test test:hospList)
+		List<Test> testList=(List<Test>)testRepository.findAll();
+		List<TestDto> testDtoList = new ArrayList<TestDto>();
+		for(Test test:testList)
 		{
-			hospDTOList.add(mapper.map(test, TestDto.class));
+			testDtoList.add(mapper.map(test, TestDto.class));
 		}
-		return hospDTOList;
+		return testDtoList;
 	}
 
 	public TestDto getTest(Integer id) {

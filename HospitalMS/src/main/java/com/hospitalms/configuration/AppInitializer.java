@@ -33,6 +33,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         registration.setMultipartConfig(getMultipartConfigElement());
+        registration.setInitParameter("throwExceptionIfNoHandlerFound","true");
     }
     
     /**
@@ -52,5 +53,6 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	        Filter [] filters = {new CORSFilter()};
 	        return filters;
     }
+    
      
 }

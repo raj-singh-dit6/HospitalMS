@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hospitalms.dto.UserInfoDto;
 import com.hospitalms.model.User;
 import com.hospitalms.model.UserSession;
+import com.hospitalms.model.exceptions.MissingRecordException;
 import com.hospitalms.repository.UserRepository;
 import com.hospitalms.repository.UserSessionRepository;
 
@@ -26,37 +27,43 @@ private static final Logger LOG = LoggerFactory.getLogger(UserSessionService.cla
 	@Autowired
 	UserRepository userRepository;
 	
-	public UserInfoDto getUserSession(String userName) {
+	public UserInfoDto getUserSession(String userName) throws MissingRecordException {
 		UserInfoDto result = new UserInfoDto();
 		String sessionKey = null;
 		User user= userRepository.findByUserName(userName);
 		UserSession userSess=userSessionRepository.findByUser(user) ;
 		
-		result.setId(user.getId());
-		result.setEmail(user.getEmail());
-		result.setFirstName(user.getFirstName());
-		result.setLastName(user.getLastName());
-		result.setUserName(userName);
-		result.setRoles(user.getUserRoles());
-		result.setHospital(user.getHospital());
-		
-		if(userSess!=null)
+		if(user==null)
 		{
-			userSess.setActive(true);
-			result.setSessionKey(userSess.getSessionKey());
+			throw new MissingRecordException();
 			
 		}else {
 			
-			sessionKey = UUID.randomUUID().toString();
-			UserSession newUserSession= new UserSession();
-			newUserSession.setActive(true);
-			newUserSession.setSessionKey(sessionKey);
-			newUserSession.setUser(user);
-			userSessionRepository.save(newUserSession);
+			result.setId(user.getId());
+			result.setEmail(user.getEmail());
+			result.setFirstName(user.getFirstName());
+			result.setLastName(user.getLastName());
+			result.setUserName(userName);
+			result.setRoles(user.getUserRoles());
+			result.setHospital(user.getHospital());
 			
-			result.setSessionKey(sessionKey);
+			if(userSess!=null)
+			{
+				userSess.setActive(true);
+				result.setSessionKey(userSess.getSessionKey());
+				
+			}else {
+				
+				sessionKey = UUID.randomUUID().toString();
+				UserSession newUserSession= new UserSession();
+				newUserSession.setActive(true);
+				newUserSession.setSessionKey(sessionKey);
+				newUserSession.setUser(user);
+				userSessionRepository.save(newUserSession);
+				
+				result.setSessionKey(sessionKey);
+			}
 		}
-		
 		return result;
 	}
 	

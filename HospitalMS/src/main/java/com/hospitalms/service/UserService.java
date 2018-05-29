@@ -64,21 +64,8 @@ public class UserService{
 	
 	
 	public UserDto addUser(UserDto userDto) {
-		boolean normalUser=true;
-		/*for (Role role : userDto.getUserRoles())
-		{
-			if(role.getType().equalsIgnoreCase("DOCTOR"))
-			{
-				doctorService.addDoctor(userDto);
-				normalUser=false;
-			}else if(role.getType().equalsIgnoreCase("PATIENT")) {
-				patientService.addPatient(userDto);
-				normalUser=false;
-			}
-		}*/
-		
-		if(normalUser)
-			userRepository.save(mapper.map(userDto,User.class));
+			
+		userRepository.save(mapper.map(userDto,User.class));
 		
 		return userDto;
 	}

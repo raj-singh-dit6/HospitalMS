@@ -15,6 +15,9 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     private static final long MAX_REQUEST_SIZE = 1024 * 1024 * 30;//30MB
     private static final int FILE_SIZE_THRESHOLD = 0;
     
+    /**
+     * Provides root for Spring MVC config.
+     */
 	@Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] { AppConfig.class };
@@ -25,11 +28,17 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
         return null;
     }
   
+    /**
+     * Provides mapping for Servlets.
+     */
     @Override
     protected String[] getServletMappings() {
         return new String[] { "/" };
     }
  
+    /**
+     * Provides any custom registration.
+     */
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         registration.setMultipartConfig(getMultipartConfigElement());
@@ -46,7 +55,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     }
     
     /**
-     * Adds filter for CROSS Origin filter.
+     * Adds filter for CROSS Origin.
      */
     @Override
     protected Filter[] getServletFilters() {

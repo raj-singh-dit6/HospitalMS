@@ -19,6 +19,7 @@ import com.hospitalms.model.User;
 import com.hospitalms.repository.UserRepository;
 
 @Service("customUserDetailsService")
+@Transactional(readOnly = true)
 public class CustomUserDetailsService implements UserDetailsService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CustomUserDetailsService.class);
@@ -26,7 +27,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Transactional(readOnly = true)
+	
+	/**
+	 * Loads user details into current security context.
+	 */
 	public UserDetails loadUserByUsername(String userName) {
 		System.err.println("userName : " + userName);
 		User user = userRepository.findByUserName(userName);
@@ -45,6 +49,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 		return currentUser;
 	}
 
+	/**
+	 * Provides list of only granted autorities.
+	 * @param user
+	 * @return authorities
+	 */
 	private List<GrantedAuthority> getGrantedAuthorities(User user) {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		for (Role role : user.getUserRoles()) {

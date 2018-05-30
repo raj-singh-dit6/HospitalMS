@@ -32,6 +32,10 @@ public class DataSourceConfig {
    @Autowired
    private Environment springEnvironment;
 
+   /**
+    * Configures JPA datasource.
+    * @return
+    */
    @Bean
    public DataSource dataSource() {
 	  
@@ -45,6 +49,10 @@ public class DataSourceConfig {
       return dataSource;
    }
 
+   /**
+    * Configures JPA Entity Manager
+    * @return
+    */
    @Bean
    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
       LocalContainerEntityManagerFactoryBean entityManagerFactoryBean 
@@ -59,6 +67,10 @@ public class DataSourceConfig {
       return entityManagerFactoryBean;
    }
 
+   /**
+    * Provide hibernate properties.
+    * @return
+    */
    private Properties getHibernateProperties() {
       Properties properties = new Properties();
       properties.put("hibernate.dialect", springEnvironment.getProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect"));
@@ -71,6 +83,11 @@ public class DataSourceConfig {
       return properties;
    }
 
+   /**
+    * Configure JPA Transaction manager.
+    * @param entityManager
+    * @return
+    */
    @Bean
    public JpaTransactionManager transactionManager(EntityManagerFactory entityManager) {
       JpaTransactionManager transactionManager = new JpaTransactionManager();

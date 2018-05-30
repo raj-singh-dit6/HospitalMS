@@ -30,6 +30,9 @@ public class RESTLogoutSuccessHandler implements LogoutSuccessHandler {
 		this.mapper = messageConverter.getObjectMapper();
 	}
 
+	/**
+	 * Handles logout requests.
+	 */
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException {

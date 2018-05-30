@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hospitalms.dto.UserInfoDto;
 import com.hospitalms.model.User;
+import com.hospitalms.model.exceptions.MissingRecordException;
 import com.hospitalms.model.responses.SingleResponse;
 import com.hospitalms.repository.UserRepository;
 import com.hospitalms.service.UserService;
@@ -42,6 +43,9 @@ public class RESTAuthenticationSuccessHandler extends SavedRequestAwareAuthentic
 	@Autowired
 	MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter;
 
+	/**
+	 * Handles all authenticated requests.
+	 */
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
@@ -55,9 +59,12 @@ public class RESTAuthenticationSuccessHandler extends SavedRequestAwareAuthentic
 			UserInfoDto userSessionDTO = userSessionService.getUserSession(user.getUserName());
 			resp.setData(userSessionDTO);
 			resp.setSuccess(true);
-		} catch (Exception e) {
-			LOG.error("Exception at onAuthenticationSuccess() ", e);
+		} catch (MissingRecordException ex) {
+			LOG.error("Exception at onAuthenticationSuccess() ", ex);
+		}catch(Exception ex){
+			LOG.error("Exception at onAuthenticationSuccess() ", ex);
 		}
+		
 		PrintWriter writer = response.getWriter();
 		mapper.writeValue(writer, resp);
 		writer.flush();

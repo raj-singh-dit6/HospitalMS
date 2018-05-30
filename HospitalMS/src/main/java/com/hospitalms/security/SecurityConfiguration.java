@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,6 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SecurityConfiguration.class);
+	
 	@Autowired
 	@Qualifier("customUserDetailsService")
 	UserDetailsService userDetailsService;
@@ -46,20 +45,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	PersistentTokenRepository tokenRepository;
 
-	@Autowired
-	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-	 try{
-			auth.userDetailsService(userDetailsService);
-		}catch(BadCredentialsException ex)
-		{
-			LOG.error("exception in configureGlobalSecurity()", ex);
-		}catch(Exception ex)
-		{
-			LOG.error("exception in configureGlobalSecurity()", ex);
-		}
-		auth.authenticationProvider(authenticationProvider());
-	}
-
+	/**
+	 * Configures spring security parameter like entry point, failure handling , authentication provider, request url matchers, success handler.
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/**").permitAll().and()
@@ -76,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	/**
 	 * Returns BCryptPasswordEncoder
 	 * 
-	 * @return
+	 * @return BCryptPasswordEncoder
 	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -84,9 +72,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * Returns authenticationProvider
+	 * Configure  Authentication Provider for custom user details service.
 	 * 
-	 * @return
+	 * @return authenticationProvider
 	 */
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -96,6 +84,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return authenticationProvider;
 	}
 
+	/**
+	 * Configure persistence of token for "remember-me" feature of spring security.
+	 * @return tokenBasedservice
+	 */
 	@Bean
 	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
 		PersistentTokenBasedRememberMeServices tokenBasedservice = new PersistentTokenBasedRememberMeServices(
@@ -103,11 +95,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return tokenBasedservice;
 	}
 
+	/**
+	 * Configures trust decision making unit for Authentication process.
+	 * @return
+	 */
 	@Bean
 	public AuthenticationTrustResolver getAuthenticationTrustResolver() {
 		return new AuthenticationTrustResolverImpl();
 	}
 
+	/**
+	 * Configures Cross-Origin for spring security if HIGHEST PRECEDENCE filter does not come into action.
+	 * @return corsConfigurationSource
+	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		final CorsConfiguration configuration = new CorsConfiguration();
